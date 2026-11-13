@@ -2,7 +2,7 @@
   "id": "LexArcana",
   "title": "Lex Arcana",
   "description": "A game system by players of Lex Arcana - An Empire Without End RPG. Unofficial fork of Foundry-VTT-Lex-Arcana/foundryvtt-lexarcana (by Draedrus, Lysoun, Milo115b, ForjaSalvaje, ParvusDomus) ported to Foundry VTT v13/v14 by khovisfersa.",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "authors": [
     {
       "name": "Draedrus, Lysoun, Milo115b, ForjaSalvaje, ParvusDomus",

@@ -33,6 +33,12 @@ Unbalanced mode with 3 dices: 1d12+1d3+1d3
 * Adding item classes to items and association for 'de Bello' Peritia specialties
 
 # Versions
+## 0.3.0 (fork: Imperium visual theme)
+* New visual theme inspired by Ancient Rome: marble, Pompeian red, Tyrian purple and gold, Greek key bands, Trajan lettering
+* Redesigned actor headers (gilded medallion portrait with golden laurels, engraved name, resource cartouches)
+* Virtutes / Peritiae shown as tablets with values in golden coins; restyled tabs, item lists, item sheets, dialogs
+* Roll chat cards with banner header, highlighted result and degree of success seals
+
 ## 0.2.0 (fork: Foundry v13 / v14 port)
 * Requires Foundry VTT v13 or later (verified on v14)
 * Replaced the deprecated `template.json` by Data Models declared in `system.json` (`documentTypes`); legacy data is migrated automatically
