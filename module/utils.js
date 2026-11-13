@@ -2,47 +2,35 @@
 /*                  Tools                       */
 /* -------------------------------------------- */
 
-Array.prototype.contains = function(v)
-{
-	for (var i = 0; i < this.length; i++)
-	{
-	  if (this[i] === v) return true;
-	}
-	return false;
-}
-  
-Array.prototype.unique = function()
-{
-	return this.filter((item, i, ar) => ar.indexOf(item) === i);;
-}
+const PHYSICAL_ITEM_TYPES = ['meleeWeapon', 'rangedWeapon', 'shield', 'armor'];
 
-export class LexArcanaUtils 
+export class LexArcanaUtils
 {
 	static ObjectToArray(obj)
 	{
-		return Object.values(obj);
+		if (Array.isArray(obj)) return obj;
+		return Object.values(obj ?? {});
 	}
 
-	static getItemClasses()
+	/**
+	 * List the distinct item classes of the world items (and of the given actor's items)
+	 * @param {Actor} [actor]
+	 * @returns {string[]}
+	 */
+	static getItemClasses(actor = null)
 	{
-		let itemClasses = new Array();
-		let items = Array.from(game.items.values());
-		items.forEach(function(_item)
+		const itemClasses = new Set();
+		const sources = [game.items?.contents ?? [], actor?.items?.contents ?? []];
+		for (const items of sources)
 		{
-			if(
-				//_item.data.data.class!==''
-				_item.system.class!==''
-				&& (
-						_item.type === 'meleeWeapon'
-					|| _item.type === 'rangedWeapon'
-					|| _item.type === 'shield'
-					|| _item.type === 'armor'
-				)
-			)
+			for (const _item of items)
 			{
-				itemClasses.push(_item.system.class);
+				if (_item.system?.class && PHYSICAL_ITEM_TYPES.includes(_item.type))
+				{
+					itemClasses.add(_item.system.class);
+				}
 			}
-		});
-		return itemClasses.unique();
+		}
+		return Array.from(itemClasses);
 	}
 };

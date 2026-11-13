@@ -1,8 +1,8 @@
-<form class="{{cssClass}} flexcol limited" autocomplete="off">
+<div class="lexarcana-sheet {{cssClass}} flexcol limited">
 
     {{!-- Sheet Header --}}
     <header class="sheet-header flexrow">
-        <img class="profile" src="{{actor.img}}" title="{{actor.name}}" data-edit="img"/>
+        <img class="profile" src="{{actor.img}}" title="{{actor.name}}" data-edit="img" data-action="editImage"/>
 
         <section class="header-details flexrow">
             <h1 class="charname">
@@ -14,7 +14,7 @@
     {{!-- Sheet Body --}}
     <section class="sheet-body">
         <div class="tab biography">
-            {{editor actor.system.biography target="system.biography" button=true owner=owner editable=true}}
+            <prose-mirror name="system.biography" value="{{actor.system.biography}}" toggled data-document-uuid="{{document.uuid}}">{{{enriched.biography}}}</prose-mirror>
         </div>
     </section>
-</form>
+</div>

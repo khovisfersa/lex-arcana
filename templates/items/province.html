@@ -1,8 +1,8 @@
-<form class="{{cssClass}} flexcol" autocomplete="off">
+<div class="lexarcana-sheet {{cssClass}} flexcol">
 
     {{!-- Item Sheet Header --}}
     <header class="sheet-header flexrow">
-        <img class="profile" src="{{item.img}}" title="{{item.name}}" data-edit="img"/>
+        <img class="profile" src="{{item.img}}" title="{{item.name}}" data-edit="img" data-action="editImage"/>
 
         <div class="header-details flexrow">
             <h1>
@@ -17,8 +17,8 @@
 
     {{!-- Custos Sheet Navigation --}}
     <nav class="sheet-navigation tabs" data-group="primary">
-        <a class="item active" data-tab="information">{{ localize "LexArcana.Information" }}</a>
-        <a class="item" data-tab="description">{{ localize "LexArcana.Description" }}</a>
+        <a class="item" data-action="tab" data-group="primary" data-tab="information">{{ localize "LexArcana.Information" }}</a>
+        <a class="item" data-action="tab" data-group="primary" data-tab="description">{{ localize "LexArcana.Description" }}</a>
     </nav>
 
     {{!-- Item Sheet Body --}}
@@ -29,7 +29,7 @@
             <div>
                 <h3>{{ localize "LexArcana.LanguagesSpokenLabel" }}</h3>
                 <div class="grid-layout-2c">
-                    <input style="width: 100%" type="text" name="system.languages" value="{{item.system.languages}}" data-dtype="Text"/>
+                    <input style="width: 100%" type="text" name="system.languages" value="{{item.system.languages}}"/>
                 </div>
             </div>
 
@@ -39,17 +39,17 @@
                 <div>
                     <ul class="grid-layout-2c grid-layout2c-left-text-right-number">
                         <li><label>{{ localize "LexArcana.Peritia.DeBello" }}</label></li>
-                        <li><input type="text" name="system.peritiaeModifiers.deBello.value" value="{{item.system.peritiaeModifiers.deBello.value}}" data-dtype="Number"/></li>
+                        <li><input type="text" name="system.peritiaeModifiers.deBello.value" value="{{item.system.peritiaeModifiers.deBello.value}}"/></li>
                         <li><label>{{ localize "LexArcana.Peritia.DeNatura" }}</label></li>
-                        <li><input type="text" name="system.peritiaeModifiers.deNatura.value" value="{{item.system.peritiaeModifiers.deNatura.value}}" data-dtype="Number"/></li>
+                        <li><input type="text" name="system.peritiaeModifiers.deNatura.value" value="{{item.system.peritiaeModifiers.deNatura.value}}"/></li>
                         <li><label>{{ localize "LexArcana.Peritia.DeSocietate" }}</label></li>
-                        <li><input type="text" name="system.peritiaeModifiers.deSocietate.value" value="{{item.system.peritiaeModifiers.deSocietate.value}}" data-dtype="Number"/></li>
+                        <li><input type="text" name="system.peritiaeModifiers.deSocietate.value" value="{{item.system.peritiaeModifiers.deSocietate.value}}"/></li>
                         <li><label>{{ localize "LexArcana.Peritia.DeMagia" }}</label></li>
-                        <li><input type="text" name="system.peritiaeModifiers.deMagia.value" value="{{item.system.peritiaeModifiers.deMagia.value}}" data-dtype="Number"/></li>
+                        <li><input type="text" name="system.peritiaeModifiers.deMagia.value" value="{{item.system.peritiaeModifiers.deMagia.value}}"/></li>
                         <li><label>{{ localize "LexArcana.Peritia.DeScientia" }}</label></li>
-                        <li><input type="text" name="system.peritiaeModifiers.deScientia.value" value="{{item.system.peritiaeModifiers.deScientia.value}}" data-dtype="Number"/></li>
+                        <li><input type="text" name="system.peritiaeModifiers.deScientia.value" value="{{item.system.peritiaeModifiers.deScientia.value}}"/></li>
                         <li><label>{{ localize "LexArcana.Peritia.DeCorpore" }}</label></li>
-                        <li><input type="text" name="system.peritiaeModifiers.deCorpore.value" value="{{item.system.peritiaeModifiers.deCorpore.value}}" data-dtype="Number"/></li>
+                        <li><input type="text" name="system.peritiaeModifiers.deCorpore.value" value="{{item.system.peritiaeModifiers.deCorpore.value}}"/></li>
                     </ul>
                     
                 </div>
@@ -58,7 +58,7 @@
 
         {{!-- Description Tab --}}
         <div class="tab flexrow description" data-group="primary" data-tab="description">
-            {{editor item.system.description target="system.description" button=true owner=owner editable=true}}
+            <prose-mirror name="system.description" value="{{item.system.description}}" toggled data-document-uuid="{{document.uuid}}">{{{enriched.description}}}</prose-mirror>
         </div>
     </section>
-</form>
+</div>

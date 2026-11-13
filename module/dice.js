@@ -70,32 +70,43 @@ export class LexArcanaDice {
 	{
 		switch(expressionType)
 		{
-			case LexArcanaDice.EXPRESSIONTYPE.UNBALANCED: return LexArcanaDice.#ComputeUnbalanced(numDice, maxFaces); break;
+			case LexArcanaDice.EXPRESSIONTYPE.UNBALANCED: return LexArcanaDice.#ComputeUnbalanced(numDice, maxFaces);
 			case LexArcanaDice.EXPRESSIONTYPE.BALANCED:
-			default: return LexArcanaDice.#ComputeBalanced(numDice, maxFaces); break;
+			default: return LexArcanaDice.#ComputeBalanced(numDice, maxFaces);
 		}
 	}
 
-	static #RollExpression = function(_expression, _difficultyThreshold = 6, _hasFateRoll = false, _totalFaces = null, _info = '')
+	/**
+	 * Build the base chat message data
+	 * @param {Actor|null} _actor
+	 * @param {string} _info
+	 */
+	static #BaseMessage(_actor, _info)
 	{
-		const rollMode = game.settings.get('core', 'rollMode');
-		const message =
-		{
-			speaker: {actor: this.id },
-			content: '<div class="LexArcanaRoll"><h1>'+_info+'</h1>',
-			blind: rollMode === 'blindroll'
+		return {
+			speaker: ChatMessage.getSpeaker(_actor ? {actor: _actor} : {}),
+			content: '<div class="LexArcanaRoll"><h1>'+foundry.utils.escapeHTML(_info ?? '')+'</h1>',
+			sound: CONFIG.sounds.dice,
+			rolls: []
 		};
+	}
+
+	static #ErrorMessage(_message)
+	{
+		_message.content += '<p class="error">'+game.i18n.localize('LexArcana.InvalidRoll')+'</p>';
+		_message.content += '</div>';
+		delete _message.sound;
+		return {result: 0, diceHasFated: false, message: _message, hasError: true};
+	}
+
+	static async #RollExpression(_expression, _difficultyThreshold = 6, _hasFateRoll = false, _totalFaces = null, _info = '', _actor = null)
+	{
+		const message = LexArcanaDice.#BaseMessage(_actor, _info);
 		// accept expressions as 1d8, 2d4+1d12, 1d5, 1d6, 1d10, 1d20 etc.
 		const diceFormulaRegExp = '^(([1-9][0-9]*)?d([34568]|(?:10)|(?:12)|(?:20)))(\\+(([1-9][0-9]*)?d([34568]|(?:10)|(?:12)|(?:20))))*';
-		if(!_expression.match(diceFormulaRegExp))
+		if(!_expression || !_expression.match(diceFormulaRegExp) || !Roll.validate(_expression))
 		{
-			message.type = CONST.CHAT_MESSAGE_TYPES.ROLL;
-			message.sound = CONFIG.sounds.dice;
-			message.content += '<p class="error">'+game.i18n.localize('LexArcana.InvalidRoll')+'</p>';
-			message.content += '</div>';
-			message.isRoll = false;
-			message.roll = null;
-			return {result: 0, diceHasFated: false, message: message, hasError: true};
+			return LexArcanaDice.#ErrorMessage(message);
 		}
 		let diceHasFated = false;
 		let computedTotal = 0;
@@ -104,26 +115,19 @@ export class LexArcanaDice {
 		if(totalFaces === null)
 		{
 			totalFaces = 0;
-			let roll = new Roll(_expression);
-			let rollEval = roll.evaluate({async: false});
-			if(rollEval.dice.length===0)
+			const roll = new Roll(_expression);
+			if(roll.dice.length===0)
 			{
-				message.type = CONST.CHAT_MESSAGE_TYPES.ROLL;
-				message.sound = CONFIG.sounds.dice;
-				message.content += '<p class="error">'+game.i18n.localize('LexArcana.InvalidRoll')+'</p>';
-				message.content += '</div>';
-				message.isRoll = false;
-				message.roll = null;
-				return {result: computedTotal, diceHasFated: diceHasFated, message: message, hasError: true};
+				return LexArcanaDice.#ErrorMessage(message);
 			}
-			rollEval.dice.forEach((die) => totalFaces+=die.faces);
+			roll.dice.forEach((die) => totalFaces+=die.number*die.faces);
 		}
 		let previousHasFated = false;
 		let previousTotal = 0;
 		do
 		{
-			let roll = new Roll(_expression);
-			let evaluatedRoll = roll.evaluate({async: false});
+			const evaluatedRoll = await new Roll(_expression).evaluate();
+			message.rolls.push(evaluatedRoll);
 			diceHasFated = evaluatedRoll.total===totalFaces && _hasFateRoll;
 			if(diceHasFated)
 			{
@@ -145,7 +149,6 @@ export class LexArcanaDice {
 
 			message.content+='<hr/>';
 			previousTotal = computedTotal;
-			message.roll = evaluatedRoll; // always set the last roll
 			// post-process
 			if(diceHasFated)
 			{
@@ -176,37 +179,41 @@ export class LexArcanaDice {
 		message.content += '</div>';
 
 		message.content += '</div>';
-		message.type = CONST.CHAT_MESSAGE_TYPES.ROLL;
-		message.sound = CONFIG.sounds.dice;
 		return {result: computedTotal, diceHasFated: diceHasFated, message: message, hasError: false};
 	}
 
+	/**
+	 * Create the chat message, applying the current roll/message visibility mode.
+	 * Foundry v14 replaced the "rollMode" setting by "messageMode" (and ChatMessage.applyRollMode by applyMode).
+	 */
 	static #CreateChatMessage = function(_message)
 	{
+		if(typeof ChatMessage.applyMode === 'function') ChatMessage.applyMode(_message);
+		else ChatMessage.applyRollMode(_message, game.settings.get('core', 'rollMode'));
 		return ChatMessage.create(_message);
 	}
 
-	static #ComputedRoll = function(_numDice, _maxFaces, _expressionType = LexArcanaDice.EXPRESSIONTYPE.BALANCED, _difficultyThreshold = 6, _hasFateRoll = false, _info='')
+	static async #ComputedRoll(_numDice, _maxFaces, _expressionType = LexArcanaDice.EXPRESSIONTYPE.BALANCED, _difficultyThreshold = 6, _hasFateRoll = false, _info='', _actor = null)
 	{
 		let dice = LexArcanaDice.ComputeExpression(_numDice, _maxFaces, _expressionType);
-		return LexArcanaDice.#RollExpression(dice.expression, _difficultyThreshold, _hasFateRoll, dice.totalFaces, _info);
+		return LexArcanaDice.#RollExpression(dice.expression, _difficultyThreshold, _hasFateRoll, dice.totalFaces, _info, _actor);
 	}
 
-	static RollFlat = function(_numDice, _maxFaces, _expressionType = LexArcanaDice.EXPRESSIONTYPE.BALANCED, _hasFateRoll = false, _info='')
+	static async RollFlat(_numDice, _maxFaces, _expressionType = LexArcanaDice.EXPRESSIONTYPE.BALANCED, _hasFateRoll = false, _info='', _actor = null)
 	{
 		let dice = LexArcanaDice.ComputeExpression(_numDice, _maxFaces, _expressionType);
-		return LexArcanaDice.#RollExpression(dice.expression, -1, _hasFateRoll, dice.totalFaces, _info);
+		return LexArcanaDice.#RollExpression(dice.expression, -1, _hasFateRoll, dice.totalFaces, _info, _actor);
 	}
 
-	static Roll(_numDice, _maxFaces, _expressionType = LexArcanaDice.EXPRESSIONTYPE.BALANCED, _difficultyThreshold = 6, _hasFateRoll = false, _info='')
+	static async Roll(_numDice, _maxFaces, _expressionType = LexArcanaDice.EXPRESSIONTYPE.BALANCED, _difficultyThreshold = 6, _hasFateRoll = false, _info='', _actor = null)
 	{
-		let res = LexArcanaDice.#ComputedRoll(_numDice, _maxFaces, _expressionType, _difficultyThreshold, _hasFateRoll, _info);
-		LexArcanaDice.#CreateChatMessage(res.message);
+		let res = await LexArcanaDice.#ComputedRoll(_numDice, _maxFaces, _expressionType, _difficultyThreshold, _hasFateRoll, _info, _actor);
+		return LexArcanaDice.#CreateChatMessage(res.message);
 	}
 
-	static RollExpression(_expression, _difficultyThreshold = 6, _hasFateRoll = false, _info='')
+	static async RollExpression(_expression, _difficultyThreshold = 6, _hasFateRoll = false, _info='', _actor = null)
 	{
-		let res = LexArcanaDice.#RollExpression(_expression, _difficultyThreshold, _hasFateRoll, null, _info);
-		LexArcanaDice.#CreateChatMessage(res.message);
+		let res = await LexArcanaDice.#RollExpression(_expression, _difficultyThreshold, _hasFateRoll, null, _info, _actor);
+		return LexArcanaDice.#CreateChatMessage(res.message);
 	}
 };

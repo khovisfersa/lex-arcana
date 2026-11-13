@@ -7,9 +7,8 @@ import {System} from './config.js';
  */
 export const preloadHandlebarsTemplates = async function ()
 {
+    const loadTemplates = foundry.applications.handlebars.loadTemplates;
     return loadTemplates([
-
-        // Shared Partials
 
         // Actor Sheet Partials
         System.Path + '/templates/actors/parts/actor-abilities.html',
@@ -22,7 +21,5 @@ export const preloadHandlebarsTemplates = async function ()
         System.Path + '/templates/actors/npcparts/npc-header.html',
         System.Path + '/templates/actors/npcparts/creature-header.html',
         System.Path + '/templates/actors/npcparts/npc-abilities.html'
-
-        // Item Sheet Partials
     ]);
 };

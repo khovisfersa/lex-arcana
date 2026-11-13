@@ -170,3 +170,22 @@ LexArcana.SpendPietas                       = 'LexArcana.SpendPietas';
  LexArcana.RollDifficultyThreshold			= 'LexArcana.RollDifficultyThreshold';
  LexArcana.ResultName                       = 'LexArcana.ResultName';
  LexArcana.Failure                          = 'LexArcana.Failure';
+
+/**
+ * Choices used by <select> elements in the sheets
+ * (the old {{#select}} Handlebars helper no longer exists in Foundry v13+)
+ **/
+LexArcana.DiceValues = {3: '3', 4: '4', 5: '5', 6: '6', 8: '8', 10: '10', 12: '12', 20: '20'};
+LexArcana.PeritiaChoices = {
+    'deBello':      'LexArcana.Peritia.DeBello',
+    'deCorpore':    'LexArcana.Peritia.DeCorpore',
+    'deMagia':      'LexArcana.Peritia.DeMagia',
+    'deNatura':     'LexArcana.Peritia.DeNatura',
+    'deScientia':   'LexArcana.Peritia.DeScientia',
+    'deSocietate':  'LexArcana.Peritia.DeSocietate'
+};
+LexArcana.Durations = {
+    'short':    'LexArcana.Short',
+    'average':  'LexArcana.Average',
+    'long':     'LexArcana.Long'
+};

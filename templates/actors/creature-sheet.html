@@ -1,4 +1,4 @@
-<form class="{{cssClass}} flexcol" autocomplete="off">
+<div class="lexarcana-sheet {{cssClass}} flexcol">
 
     {{!-- Sheet Header --}}
     <header class="sheet-header">
@@ -8,7 +8,7 @@
 			<ul class="flexrow">
 				<li><div class="portrait">
                     <img class="laurel" src="./systems/LexArcana/styles/images/laurel1.webp"/>
-                    <img class="profile" src="{{actor.img}}" title="{{actor.name}}" data-edit="img"/>
+                    <img class="profile" src="{{actor.img}}" title="{{actor.name}}" data-edit="img" data-action="editImage"/>
                     <img class="laurel" src="./systems/LexArcana/styles/images/laurel2.webp"/>
                 </div></li>
 				<li>
@@ -39,10 +39,10 @@
 
     {{!-- Custos Sheet Navigation --}}
     <nav class="sheet-navigation tabs" data-group="primary">
-        <a class="item active" data-tab="abilities">{{ localize "LexArcana.Abilities" }}</a>
-        <a class="item" data-tab="inventory">{{ localize "LexArcana.Inventory" }}</a>
-        <a class="item" data-tab="biography">{{ localize "LexArcana.Biography" }}</a>
-        <a class="item" data-tab="information">{{ localize "LexArcana.Information" }}</a>
+        <a class="item" data-action="tab" data-group="primary" data-tab="abilities">{{ localize "LexArcana.Abilities" }}</a>
+        <a class="item" data-action="tab" data-group="primary" data-tab="inventory">{{ localize "LexArcana.Inventory" }}</a>
+        <a class="item" data-action="tab" data-group="primary" data-tab="biography">{{ localize "LexArcana.Biography" }}</a>
+        <a class="item" data-action="tab" data-group="primary" data-tab="information">{{ localize "LexArcana.Information" }}</a>
     </nav>
 
     {{!-- Custos Sheet Body --}}
@@ -58,8 +58,8 @@
 				<li>
 					<div>
 						<i data-id="{{item._id}}">{{item.name}}</i>&nbsp;
-						<a class="edit-magical-power fas fa-edit" data-id="{{item._id}}">&nbsp;</a>&nbsp;
-						<a class="delete-magical-power fas fa-trash" data-id="{{item._id}}">&nbsp;</a>
+						<a class="edit-magical-power fas fa-edit" data-action="itemEdit" data-id="{{item._id}}">&nbsp;</a>&nbsp;
+						<a class="delete-magical-power fas fa-trash" data-action="itemDelete" data-id="{{item._id}}">&nbsp;</a>
 					</div>
 				</li>
 				{{/each}}
@@ -74,19 +74,19 @@
         {{!-- Biography Tab --}}
         <div class="tab biography flexrow" data-group="primary" data-tab="biography">
             <div class="biography">
-                {{editor actor.system.biography target="system.biography" button=true owner=owner editable=true}}
+                <prose-mirror name="system.biography" value="{{actor.system.biography}}" toggled data-document-uuid="{{document.uuid}}">{{{enriched.biography}}}</prose-mirror>
             </div>
         </div>
         {{!-- Information Tab --}}
         <div class="tab biography flexrow" data-group="primary" data-tab="information">
             <div class="biography">
                 <h4 class="attribute-name box-title">{{ localize "LexArcana.DoS1" }}</h4>
-                {{editor actor.system.information.degree1 target="system.information.degree1" button=true owner=owner editable=true}}
+                <prose-mirror name="system.information.degree1" value="{{actor.system.information.degree1}}" toggled data-document-uuid="{{document.uuid}}">{{{enriched.degree1}}}</prose-mirror>
                 <h4 class="attribute-name box-title">{{ localize "LexArcana.DoS2" }}</h4>
-                {{editor actor.system.information.degree2 target="system.information.degree2" button=true owner=owner editable=true}}
+                <prose-mirror name="system.information.degree2" value="{{actor.system.information.degree2}}" toggled data-document-uuid="{{document.uuid}}">{{{enriched.degree2}}}</prose-mirror>
                 <h4 class="attribute-name box-title">{{ localize "LexArcana.DoS3" }}</h4>
-                {{editor actor.system.information.degree3 target="system.information.degree3" button=true owner=owner editable=true}}
+                <prose-mirror name="system.information.degree3" value="{{actor.system.information.degree3}}" toggled data-document-uuid="{{document.uuid}}">{{{enriched.degree3}}}</prose-mirror>
             </div>
         </div>
     </section>
-</form>
+</div>

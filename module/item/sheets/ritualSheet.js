@@ -1,90 +1,48 @@
-import {LexArcana} from '../../config.js';
-import {System} from '../../config.js';
 import LexArcanaItemSheet from './base.js';
 
 /**
  * Override and extend the core LexArcanaItemSheet implementation to handle specific item types
+ * (rituals, indigamenta and talents)
  * @extends {LexArcanaItemSheet}
  */
 export default class LexArcanaRitualSheet extends LexArcanaItemSheet
 {
-	constructor(...args)
-	{
-		super(...args);
-	}
-
-	/* -------------------------------------------- */
+	/** @override */
+	static DEFAULT_OPTIONS = {
+		actions: {
+			disciplineAdd: function(event, target) { return this._onDisciplineAdd(event, target); },
+			disciplineDelete: function(event, target) { return this._onDisciplineDelete(event, target); }
+		}
+	};
 
 	/** @override */
-	static get defaultOptions()
+	async _prepareContext(options)
 	{
-	    return mergeObject(super.defaultOptions, {
-		width: 560,
-		height: 400,
-		classes: ['LexArcana', 'sheet', 'item'],
-		resizable: true,
-		scrollY: ['.tab.details'],
-		tabs: [{navSelector: '.tabs', contentSelector: '.sheet-body', initial: 'information'}]
-	    });
-	}
-
-	/** @override */
-	getData()
-	{
-		// Basic data
-		let isOwner = this.document.isOwner;
-		const data = super.getData();
-		data.owner = isOwner;
-		data.isGM = game.user.isGM;
-		data.limited = this.document.limited;
-		data.options = this.options;
-		data.editable = this.isEditable;
-		data.cssClass = isOwner ? 'editable' : 'locked';
-		data.config = CONFIG.LexArcana;
-		// The Actor and its Items
-		data.object = duplicate(this.object.system);
-		// Return data to the sheet
-		return data;
+		const context = await super._prepareContext(options);
+		context.disciplineChoices = CONFIG.LexArcana.Disciplines;
+		context.durationChoices = CONFIG.LexArcana.Durations;
+		return context;
 	}
 
 	static toArray(data)
 	{
-		// force values to be arrays
-		// https://github.com/trioderegion/nova/blob/319d39b274d25b35af49896ea83a4115cda35cf6/module/documents/actor.mjs#L127
-		/*const forceArray = (path) => {
-			const value = data[path];
-			if (!!value && typeof value == 'string') {
-				data[path] = [value];
-			}
-		}*/
-		return Object.entries(data)
-		.map((value, index) => {
-		   return value.pop()
-		});
+		if (Array.isArray(data)) return data;
+		return Object.values(data ?? {});
 	}
 
-	/** @override */
-	activateListeners(html)
+	_onDisciplineAdd(event, target)
 	{
-		super.activateListeners(html);
-		html.find('a.discipline-add').click(function()
-		{
-			const id = this.dataset.itemId;
-			let item = game.items.get(id);
-			let disciplines = item.system.disciplines ?? new Array();
-			disciplines.push({name:'precognition', difficultyThreshold: 6});
-			item.update({ 'system.disciplines': LexArcanaRitualSheet.toArray(disciplines) });
-		});
-		html.find('a.discipline-delete').click(function()
-		{
-			const id = this.dataset.itemId;
-			let item = game.items.get(id);
-			if(item.system.disciplines===undefined)
-				return;
+		event.preventDefault();
+		const disciplines = foundry.utils.deepClone(LexArcanaRitualSheet.toArray(this.item.system.disciplines));
+		disciplines.push({name:'precognition', difficultyThreshold: 6});
+		return this.item.update({ 'system.disciplines': disciplines });
+	}
 
-			item.system.disciplines = LexArcanaRitualSheet.toArray(item.system.disciplines);
-			/*delete */item.system.disciplines.splice(this.dataset.disciplineId, 1);
-			item.update({ 'system.disciplines': item.system.disciplines });
-		});
+	_onDisciplineDelete(event, target)
+	{
+		event.preventDefault();
+		const disciplines = foundry.utils.deepClone(LexArcanaRitualSheet.toArray(this.item.system.disciplines));
+		disciplines.splice(Number(target.dataset.disciplineId), 1);
+		return this.item.update({ 'system.disciplines': disciplines });
 	}
 }

@@ -2,7 +2,7 @@
   "id": "LexArcana",
   "title": "Lex Arcana",
   "description": "A game system by players of Lex Arcana - An Empire Without End RPG",
-  "version": "0.1.3",
+  "version": "0.2.0",
   "authors": [
     {
       "name": "Draedrus, Lysoun, Milo115b, ForjaSalvaje, ParvusDomus",
@@ -10,8 +10,8 @@
     }
   ],
   "compatibility": {
-    "minimum": "10",
-    "verified": "11"
+    "minimum": "13",
+    "verified": "14"
   },
   "esmodules": [
     "LexArcana.js"
@@ -33,9 +33,86 @@
       "flags": {}
     }
   ],
+  "documentTypes": {
+    "Actor": {
+      "custos": {
+        "htmlFields": [
+          "biography"
+        ]
+      },
+      "npc": {
+        "htmlFields": [
+          "biography"
+        ]
+      },
+      "creature": {
+        "htmlFields": [
+          "biography",
+          "information.degree1",
+          "information.degree2",
+          "information.degree3"
+        ]
+      }
+    },
+    "Item": {
+      "province": {
+        "htmlFields": [
+          "description"
+        ]
+      },
+      "meleeWeapon": {
+        "htmlFields": [
+          "description"
+        ]
+      },
+      "rangedWeapon": {
+        "htmlFields": [
+          "description"
+        ]
+      },
+      "armor": {
+        "htmlFields": [
+          "description"
+        ]
+      },
+      "shield": {
+        "htmlFields": [
+          "description"
+        ]
+      },
+      "indigamentum": {
+        "htmlFields": [
+          "description",
+          "requirement"
+        ]
+      },
+      "talent": {
+        "htmlFields": [
+          "description"
+        ]
+      },
+      "ritual": {
+        "htmlFields": [
+          "description"
+        ]
+      },
+      "specialAbility": {
+        "htmlFields": [
+          "description"
+        ]
+      },
+      "magicalPower": {
+        "htmlFields": [
+          "description"
+        ]
+      }
+    }
+  },
   "initiative": "1d20",
-  "gridDistance": 2,
-  "gridUnits": "m",
+  "grid": {
+    "distance": 2,
+    "units": "m"
+  },
   "primaryTokenAttribute": "attributes.hitPoints",
   "secondaryTokenAttribute": "attributes.pietas",
   "url": "https://github.com/Foundry-VTT-Lex-Arcana/foundryvtt-lexarcana",

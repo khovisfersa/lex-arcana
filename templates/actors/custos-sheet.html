@@ -1,4 +1,4 @@
-<form class="{{cssClass}} flexcol" autocomplete="off">
+<div class="lexarcana-sheet {{cssClass}} flexcol">
 
     {{!-- Sheet Header --}}
     <header class="sheet-header">
@@ -8,7 +8,7 @@
 			<ul class="flexrow">
 				<li><div class="portrait">
                     <img class="laurel" src="./systems/LexArcana/styles/images/laurel1.webp"/>
-                    <img class="profile" src="{{actor.img}}" title="{{actor.name}}" data-edit="img"/>
+                    <img class="profile" src="{{actor.img}}" title="{{actor.name}}" data-edit="img" data-action="editImage"/>
                     <img class="laurel" src="./systems/LexArcana/styles/images/laurel2.webp"/>
                 </div></li>
 				<li>
@@ -27,13 +27,13 @@
                          <li>
                              <h4 class="attribute-name box-title">{{ localize "LexArcana.Age" }}</h4>
                              <div class="attribute-value">
-                                <input name="system.age" type="text" value="{{actor.system.age}}" placeholder="19" data-dtype="Number"/>
+                                <input name="system.age" type="text" value="{{actor.system.age}}" placeholder="19"/>
                              </div>
                         </li>
                         <li>
                             <h4 class="attribute-name box-title">{{ localize "LexArcana.Gender" }}</h4>
                             <div class="attribute-value">
-                                <input name="system.gender" type="text" value="{{actor.system.gender}}" placeholder="N/A" data-dtype="String"/>
+                                <input name="system.gender" type="text" value="{{actor.system.gender}}" placeholder="N/A"/>
                             </div>
                         </li>
                         <li>
@@ -50,19 +50,19 @@
                 <li class="attribute languages">
                     <h4 class="attribute-name box-title">{{ localize "LexArcana.Languages" }}</h4>
                     <div class="attribute-wide-value">
-                        <input name="system.languages" type="text" value="{{actor.system.languages}}" placeholder="N/A" data-dtype="String" style="width: auto";/>
+                        <input name="system.languages" type="text" value="{{actor.system.languages}}" placeholder="N/A" style="width: auto";/>
                     </div>
                 </li>
                 <li class="attribute office">
                     <h4 class="attribute-name box-title">{{ localize "LexArcana.Office" }}</h4>
                     <div class="attribute-wide-value">
-                        <input name="system.office" type="text" value="{{actor.system.office}}" placeholder="N/A" data-dtype="String"/>
+                        <input name="system.office" type="text" value="{{actor.system.office}}" placeholder="N/A"/>
                     </div>
                 </li>
                 <li class="attribute rank">
                     <h4 class="attribute-name box-title">{{ localize "LexArcana.Rank" }}</h4>
                     <div class="attribute-wide-value">
-                        <input name="system.rank" type="text" value="{{actor.system.rank}}" placeholder="Gregarius" data-dtype="String"/>
+                        <input name="system.rank" type="text" value="{{actor.system.rank}}" placeholder="Gregarius"/>
                     </div>
                 </li>
                 <li>
@@ -79,23 +79,23 @@
                     <h4 class="attribute-name box-title">{{ localize "LexArcana.HitPoints" }} | {{ localize "LexArcana.Encumbrance" }}</h4>
                     <div class="attribute-value multiple">
                         {{#if (lte actor.system.attributes.hitPoints.value actor.system.encumbrance)}}
-                            <input name="system.attributes.hitPoints.value" style="color:darkred" type="text" value="{{actor.system.attributes.hitPoints.value}}" placeholder="10" data-dtype="Number"/>
+                            <input name="system.attributes.hitPoints.value" style="color:darkred" type="text" value="{{actor.system.attributes.hitPoints.value}}" placeholder="10"/>
                         {{else}}
-                            <input name="system.attributes.hitPoints.value" type="text" value="{{actor.system.attributes.hitPoints.value}}" placeholder="10" data-dtype="Number"/>
+                            <input name="system.attributes.hitPoints.value" type="text" value="{{actor.system.attributes.hitPoints.value}}" placeholder="10"/>
                         {{/if}}
                         <span class="sep"> / </span>
-                        <input name="system.attributes.hitPoints.max" type="text" value="{{actor.system.attributes.hitPoints.max}}" placeholder="10" data-dtype="Number"/>
+                        <input name="system.attributes.hitPoints.max" type="text" value="{{actor.system.attributes.hitPoints.max}}" placeholder="10"/>
                         <span class="sep">  |  </span>
-                        <input name="system.encumbrance" type="text" value="{{actor.system.encumbrance}}" placeholder="0" data-dtype="Number"/>
+                        <input type="text" value="{{actor.system.encumbrance}}" readonly data-tooltip="LexArcana.Encumbrance"/>
                     </div>
                 </li>
 
                 <li class="attribute pietas">
                     <h4 class="attribute-name box-title">{{ localize "LexArcana.Pietas" }}</h4>
                     <div class="attribute-value multiple">
-                        <input name="system.attributes.pietas.value" type="text" value="{{actor.system.attributes.pietas.value}}" placeholder="10" data-dtype="Number"/>
+                        <input name="system.attributes.pietas.value" type="text" value="{{actor.system.attributes.pietas.value}}" placeholder="10"/>
                         <span class="sep"> / </span>
-                        <input name="system.attributes.pietas.max" type="text" value="{{actor.system.attributes.pietas.max}}" placeholder="10" data-dtype="Number"/>
+                        <input name="system.attributes.pietas.max" type="text" value="{{actor.system.attributes.pietas.max}}" placeholder="10"/>
                     </div>
                 </li>
 				<li class="item item-header province item-controls" data-item-id="{{province._id}}">
@@ -108,11 +108,11 @@
 
     {{!-- Custos Sheet Navigation --}}
     <nav class="sheet-navigation tabs" data-group="primary">
-        <a class="item active" data-tab="abilities">{{ localize "LexArcana.Abilities" }}</a>
-        <a class="item" data-tab="inventory">{{ localize "LexArcana.Inventory" }}</a>
-        <a class="item" data-tab="rituals">{{ localize "LexArcana.Rituals" }}</a>
-        <a class="item" data-tab="biography">{{ localize "LexArcana.Biography" }}</a>
-        <a class="item" data-tab="curriculum">{{ localize "LexArcana.Curriculum" }}</a>
+        <a class="item" data-action="tab" data-group="primary" data-tab="abilities">{{ localize "LexArcana.Abilities" }}</a>
+        <a class="item" data-action="tab" data-group="primary" data-tab="inventory">{{ localize "LexArcana.Inventory" }}</a>
+        <a class="item" data-action="tab" data-group="primary" data-tab="rituals">{{ localize "LexArcana.Rituals" }}</a>
+        <a class="item" data-action="tab" data-group="primary" data-tab="biography">{{ localize "LexArcana.Biography" }}</a>
+        <a class="item" data-action="tab" data-group="primary" data-tab="curriculum">{{ localize "LexArcana.Curriculum" }}</a>
     </nav>
 
     {{!-- Custos Sheet Body --}}
@@ -136,7 +136,7 @@
         {{!-- Biography Tab --}}
         <div class="tab biography flexrow" data-group="primary" data-tab="biography">
             <div class="biography">
-                {{editor actor.system.biography target="system.biography" button=true owner=owner editable=true}}
+                <prose-mirror name="system.biography" value="{{actor.system.biography}}" toggled data-document-uuid="{{document.uuid}}">{{{enriched.biography}}}</prose-mirror>
             </div>
         </div>
         {{!-- Curriculum Tab --}}
@@ -144,4 +144,4 @@
             {{> "systems/LexArcana/templates/actors/parts/actor-curriculum.html"}}
         </div>
     </section>
-</form>
+</div>

@@ -1,7 +1,6 @@
 import LexArcanaActorSheet from "./base.js";
 import { LexArcana } from '../../config.js';
 import { LexArcanaUtils } from '../../utils.js';
-import {LexArcanaDice} from '../../dice.js';
 
 /**
  * An Actor sheet for player character type actors.
@@ -10,119 +9,52 @@ import {LexArcanaDice} from '../../dice.js';
  */
 export default class LexArcanaCustosActorSheet extends LexArcanaActorSheet
 {
-	/**
-	 * Define default rendering options for the NPC sheet
-	 * @return {Object}
-	 */
-	static get defaultOptions()
-	{
-		return mergeObject(super.defaultOptions,
-			{
-				classes: ['LexArcana', 'sheet', 'actor', LexArcana.ActorType.custos],
-				width: 720,
-				height: 680
-			});
-	}
-
-	setDefaultRollsNoRecursion(obj)
-	{
-		if (typeof obj !== 'object')
-			return;
-		Object.keys(obj).forEach(function(key,index) {
-			if(key === 'defaultRoll' && obj[key] === null)
-			{
-				obj[key] = LexArcanaDice.ComputeExpression(3, obj['value'], LexArcanaDice.EXPRESSIONTYPE.BALANCED);
-			}
-		});
-	}
-
-	setDefaultRolls(obj)
-	{
-		function shouldDefault(v)
-		{
-			return v === null || v === 'null' || v === '[object Object]';
+	/** @override */
+	static DEFAULT_OPTIONS = {
+		classes: [LexArcana.ActorType.custos],
+		position: {width: 720, height: 680},
+		actions: {
+			useIndigamentum: function(event, target) { return this._onIndigatamentaClick(event, target); }
 		}
-		if (typeof obj !== 'object')
-			return;
-		let virtutes = ["coordinatio", "auctoritas", "ratio", "vigor", "ingenium", "sensibilitas"];
-		let peritiae = ["deBello", "deCorpore", "deMagia", "deNatura",  "deScientia", "deSocietate"];
-		virtutes.forEach((v, k) =>
-		{
-			if(shouldDefault(obj.virtutes[v].defaultRoll))
-				obj.virtutes[v].defaultRoll = LexArcanaDice.ComputeExpression(3, obj.virtutes[v].value, LexArcanaDice.EXPRESSIONTYPE.BALANCED).expression;
-		});
-		peritiae.forEach((v, k) =>
-		{
-			if(shouldDefault(obj.peritiae[v].defaultRoll))
-				obj.peritiae[v].defaultRoll = LexArcanaDice.ComputeExpression(3, obj.peritiae[v].value, LexArcanaDice.EXPRESSIONTYPE.BALANCED).expression;
-			Object.keys(obj.peritiae[v].specialties).forEach(function(key,index) {
-				var spe = obj.peritiae[v].specialties[key];
-				if(shouldDefault(spe.defaultRoll))
-				{
-					spe.defaultRoll = LexArcanaDice.ComputeExpression(3, obj.peritiae[v].value+parseInt(spe.modifier), LexArcanaDice.EXPRESSIONTYPE.BALANCED).expression;
-				}
-			});
-		});
-	}
+	};
 
 	/** @override */
-	getData()
+	async _prepareContext(options)
 	{
 		// Basic data
-		const data = super.getData();
+		const data = await super._prepareContext(options);
 		// Iterate through items, allocating to containers
-		this.setDefaultRolls(data.data);
 		data.items = [];
 		data.indigamenta = [];
 		data.rituals = [];
 		data.talents = [];
 		data.province = null;
-		let encumbrance=0;
-		let experience=this.actor.system.experience;
+		const experience = Number(this.actor.system.experience) || 0;
 		for (let i of data.actor.items)
 		{
 			switch (i.type)
 			{
 				case 'province':
-				{
 					data.province = i;
 					break;
-				}
 				case 'meleeWeapon':
 				case 'rangedWeapon':
 				case 'armor':
 				case 'shield':
-				{
 					data.items.push(i);
 					break;
-				}
 				case 'indigamentum':
-				{
 					data.indigamenta.push(i);
 					break;
-				}
 				case 'ritual':
-				{
 					data.rituals.push(i);
 					break;
-				}
 				case 'talent':
-				{
 					data.talents.push(i);
 					break;
-				}
 				default:
-				{
 					break;
-				}
 			}
-			//Now that it is iterating, let's use this to calculate encumbrance
-			if (!i.system.dropped)
-			{
-				encumbrance += i.system.encumbrance | 0
-			}
-			
-			
 		}
 
         // Ability Scores
@@ -133,185 +65,67 @@ export default class LexArcanaCustosActorSheet extends LexArcanaActorSheet
         for ( let [k, v] of Object.entries(data.actor.system.peritiae))
         {
             v.label = CONFIG.LexArcana.Peritia[k];
-            v.baseValue = parseInt(v.value);
-			v.provinceValue =  data.province !== null ? data.province.system.peritiaeModifiers[k].value : 0;
+            v.baseValue = parseInt(v.value) || 0;
+			v.provinceValue = data.province !== null ? (Number(data.province.system.peritiaeModifiers?.[k]?.value) || 0) : 0;
             v.finalValue = v.baseValue + v.provinceValue;
 			v.total_exp = experience * v.exp_multiplier;
 			v.remaining_exp = v.total_exp - v.spent_exp;
-
         }
-		data.actor.system.mosArcanorum.total_exp = experience * data.actor.system.mosArcanorum.exp_multiplier;
-		data.actor.system.mosArcanorum.remaining_exp = data.actor.system.mosArcanorum.total_exp - data.actor.system.mosArcanorum.spent_exp;
-		data.actor.system.paxDeorum.total_exp = experience * data.actor.system.paxDeorum.exp_multiplier;
-		data.actor.system.paxDeorum.remaining_exp = data.actor.system.paxDeorum.total_exp - data.actor.system.paxDeorum.spent_exp;
+		const system = data.actor.system;
+		system.mosArcanorum.total_exp = experience * system.mosArcanorum.exp_multiplier;
+		system.mosArcanorum.remaining_exp = system.mosArcanorum.total_exp - system.mosArcanorum.spent_exp;
+		system.paxDeorum.total_exp = experience * system.paxDeorum.exp_multiplier;
+		system.paxDeorum.remaining_exp = system.paxDeorum.total_exp - system.paxDeorum.spent_exp;
 
-		data.itemClasses = LexArcanaUtils.getItemClasses();
-		this.actor.update ({ 'system.encumbrance': encumbrance });
-
-		//item.update({ 'system.dropped': false });
+		data.itemClasses = LexArcanaUtils.getItemClasses(this.actor);
+		data.itemClassChoices = data.itemClasses.reduce((obj, c) => { obj[c] = c; return obj; }, {});
 
 		return data;
 	}
 
 	/* -------------------------------------------- */
-
-	/* -------------------------------------------- */
-	/*  Event Listeners and Handlers
-	/* -------------------------------------------- */
-
-	/**
-	 * Activate event listeners using the prepared sheet HTML
-	 * @param html {HTML}   The prepared HTML object ready to be rendered into the DOM
-	 */
-	activateListeners(html)
-	{
-		super.activateListeners(html);
-		if (!this.options.editable) return;
-
-		html.find('a.damage-roll').click(this._onDamageRollClick.bind(this));
-		html.find('a.armor-roll').click(this._onArmorRollClick.bind(this));
-		html.find('a.item-equip').click(this._onEquipClick.bind(this));
-		html.find('a.item-drop').click(this._onDropClick.bind(this));
-		html.find('a.item-edit').click(this._onEditClick.bind(this));
-		html.find('a.item-delete').click(this._onDeleteClick.bind(this));
-		html.find('a.indigatamenta-use').click(this._onIndigatamentaClick.bind(this));
-
-
-		// Drag events for macros.
-		if (this.actor.isOwner)
-		{
-			let handler = (ev) => this._onDragStart(ev);
-			// Find all items on the character sheet.
-			html.find('li.item').each((i, li) =>
-			{
-				// Ignore for the header row.
-				if (li.classList.contains('item-header')) return;
-				// Add draggable attribute and dragstart listener.
-				li.setAttribute('draggable', true);
-				li.addEventListener('dragstart', handler, false);
-			});
-		}
-	}
-
-	/* -------------------------------------------- */
-
-	/* -------------------------------------------- */
 	/*  Events
 	/* -------------------------------------------- */
-	async _onEquipClick(event, data)
-	{
-		event.preventDefault();
-		const dataset = event.currentTarget.dataset;
-		const item = this.actor.items.get(dataset.id);
-		item.update({ 'system.active': !item.system.active });
-		item.update({ 'system.dropped': false });
-		return;
-	}
-	async _onDropClick(event, data)
-	{
-		event.preventDefault();
-		const dataset = event.currentTarget.dataset;
-		const item = this.actor.items.get(dataset.id);
-		item.update({ 'system.dropped': !item.system.dropped });
-		item.update({ 'system.active': false });
-		return;
-	}
 
-	async _onEditClick(event, data)
+	async _onIndigatamentaClick(event, target)
 	{
 		event.preventDefault();
-		const dataset = event.currentTarget.dataset;
-		const item = this.actor.items.get(dataset.id);
-		item.sheet.render(true);
-		return;
-	}
-
-	async _onDamageRollClick(event, data)
-	{
-		event.preventDefault();
-		const dataset = event.currentTarget.dataset;
-		const item = this.actor.items.get(dataset.id);
-		LexArcanaDice.Roll(1, item.system.damage, LexArcanaDice.EXPRESSIONTYPE.BALANCED, 0, this.hasFateRoll(), item.name);
-		//this.actor.combatTurn();
-		return;
-	}
-
-	async _onIndigatamentaClick(event, data)
-	{
-		event.preventDefault();
-		const dataset = event.currentTarget.dataset;
-		const item = this.actor.items.get(dataset.id);
+		const item = this._getItemFromTarget(target);
+		if (!item) return;
 		if (item.system.used){
 			ui.notifications.error(game.i18n.localize('LexArcana.AlreadyUsedMessage'), {permanent: true});
-			return 1;
+			return;
 		}
 		let final_pietas=this.actor.system.attributes.pietas.value-item.system.cost
 		if (final_pietas < 0){
 			ui.notifications.error(game.i18n.localize('LexArcana.NotEnougPietas'), {permanent: true});
-			return 1;
+			return;
 		}
 		ui.notifications.info(game.i18n.localize('LexArcana.SpendPietas')+" "+item.system.cost+" Pietas.", {permanent: true});
-		this.actor.update ({ 'system.attributes.pietas.value': final_pietas });
-		item.update ({ 'system.used': true });
+		await this.actor.update ({ 'system.attributes.pietas.value': final_pietas });
+		await item.update ({ 'system.used': true });
 		let info=item.name+" ("+item.system.cost+" Pietas)"
 		const message =
 		{
-			speaker: {actor: this.actor.id },
+			speaker: ChatMessage.getSpeaker({actor: this.actor}),
 			content: '<div class="LexArcanaRoll"><h1>'+info+'</h1>'+item.system.description+'<hr>'+item.system.requirement+'</div>'
 		};
 		return ChatMessage.create(message);
 	}
 
-	async _onArmorRollClick(event, data)
-	{
-		event.preventDefault();
-		const dataset = event.currentTarget.dataset;
-		const item = this.actor.items.get(dataset.id);
-		let actorName = dataset.actorname;
-		LexArcanaDice.Roll(1, item.system.protection, LexArcanaDice.EXPRESSIONTYPE.BALANCED, 0,this.hasFateRoll(), actorName+": "+item.name);
-		return;
-	}
-
-	async _onDeleteClick(event, data)
-	{
-		event.preventDefault();
-		const dataset = event.currentTarget.dataset;
-		Dialog.confirm({
-			title: game.i18n.localize("LexArcana.Confirm"),
-			content: game.i18n.localize("LexArcana.ConfirmItemDeletion"),
-			yes: () => this.actor.deleteEmbeddedDocuments("Item", [dataset.id]),
-			no: () => {},
-			defaultYes: false
-		   });
-		return;
-	}
-
-
-
-	/* -------------------------------------------- */
-
 	/* -------------------------------------------- */
 	/*  Overrides
 	/* -------------------------------------------- */
-	async _onDropItem(event, data)
+
+	/** @override */
+	async _onDropItem(event, item)
 	{
-		const item = await Item.implementation.fromDropData(data);
-		if(item.type==='province')
+		if(item?.type==='province' && this.actor.isOwner && item.parent?.uuid !== this.actor.uuid)
 		{
-			// Iterate through items, allocating to containers
-			let itemIds = [];
-			for (let i of this.actor.items)
-			{
-				switch (i.type)
-				{
-					case 'province':
-						itemIds.push(i.id);
-						break;
-					default: break;
-				}
-			}
-			await this.actor.deleteEmbeddedDocuments('Item', itemIds);
+			// Only one province per custos: remove the current one(s)
+			const itemIds = this.actor.items.filter(i => i.type === 'province').map(i => i.id);
+			if (itemIds.length) await this.actor.deleteEmbeddedDocuments('Item', itemIds);
 		}
-		return super._onDropItem(event, data);
+		return super._onDropItem(event, item);
 	}
 }
