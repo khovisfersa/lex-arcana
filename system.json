@@ -1,11 +1,16 @@
 {
   "id": "LexArcana",
   "title": "Lex Arcana",
-  "description": "A game system by players of Lex Arcana - An Empire Without End RPG",
+  "description": "A game system by players of Lex Arcana - An Empire Without End RPG. Unofficial fork of Foundry-VTT-Lex-Arcana/foundryvtt-lexarcana (by Draedrus, Lysoun, Milo115b, ForjaSalvaje, ParvusDomus) ported to Foundry VTT v13/v14 by khovisfersa.",
   "version": "0.2.0",
   "authors": [
     {
       "name": "Draedrus, Lysoun, Milo115b, ForjaSalvaje, ParvusDomus",
+      "flags": {}
+    },
+    {
+      "name": "khovisfersa (Foundry v13/v14 port)",
+      "url": "https://github.com/khovisfersa",
       "flags": {}
     }
   ],
@@ -115,8 +120,9 @@
   },
   "primaryTokenAttribute": "attributes.hitPoints",
   "secondaryTokenAttribute": "attributes.pietas",
-  "url": "https://github.com/Foundry-VTT-Lex-Arcana/foundryvtt-lexarcana",
-  "manifest": "https://raw.githubusercontent.com/Foundry-VTT-Lex-Arcana/foundryvtt-lexarcana/master/system.json",
-  "download": "https://github.com/Foundry-VTT-Lex-Arcana/foundryvtt-lexarcana/archive/refs/heads/master.zip",
-  "license": "LICENSE.txt"
+  "url": "https://github.com/khovisfersa/lex-arcana",
+  "manifest": "https://raw.githubusercontent.com/khovisfersa/lex-arcana/master/system.json",
+  "download": "https://github.com/khovisfersa/lex-arcana/archive/refs/heads/master.zip",
+  "license": "LICENSE.txt",
+  "bugs": "https://github.com/khovisfersa/lex-arcana/issues"
 }

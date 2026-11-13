@@ -1,3 +1,17 @@
+# Lex Arcana for Foundry VTT v13 / v14 (fork)
+
+> **This is a fork.** It is a port of the original **Lex Arcana** game system
+> ([Foundry-VTT-Lex-Arcana/foundryvtt-lexarcana](https://github.com/Foundry-VTT-Lex-Arcana/foundryvtt-lexarcana)),
+> created by **Draedrus (Pierre-Marie Plans), Lysoun, Milo115b, ForjaSalvaje and ParvusDomus**
+> (see [CONTRIBUTORS.md](CONTRIBUTORS.md)). All credit for the system, its design and its artwork goes to them.
+>
+> The original system targets Foundry VTT v10/v11. This fork, maintained by
+> [khovisfersa](https://github.com/khovisfersa), only adapts it to run on **Foundry VTT v13 and v14**;
+> the game rules are unchanged.
+>
+> Manifest URL for this fork:
+> `https://raw.githubusercontent.com/khovisfersa/lex-arcana/master/system.json`
+
 This project is not official and hence is supported neither by Foundry VTT &trade; nor by Lex Arcana &trade;.
 
 # Rolls
@@ -19,6 +33,18 @@ Unbalanced mode with 3 dices: 1d12+1d3+1d3
 * Adding item classes to items and association for 'de Bello' Peritia specialties
 
 # Versions
+## 0.2.0 (fork: Foundry v13 / v14 port)
+* Requires Foundry VTT v13 or later (verified on v14)
+* Replaced the deprecated `template.json` by Data Models declared in `system.json` (`documentTypes`); legacy data is migrated automatically
+* Rewrote all actor and item sheets with ApplicationV2 (`ActorSheetV2` / `ItemSheetV2`) and dialogs with `DialogV2`
+* Rolls are now asynchronous and attached to chat messages (`rolls`), using the v14 message mode when available
+* Rich text editors use the `<prose-mirror>` element; `{{#select}}` replaced by `{{selectOptions}}`
+* CSS scoped to the system windows (the old global reset broke the v13+ interface)
+* Encumbrance is now computed from carried items instead of being written on every sheet render
+* Fixed: item class selector of De Bello specialties, ritual disciplines on owned items, `rollDeBello` / `combatTurn`
+* Fixed: fate roll threshold of custom expressions with several dice of the same kind (e.g. 2d6 now explodes on 12)
+* Added `TYPES.*` localization keys (en, es)
+
 # 0.1.1
 * reworked template.json again, going towards the stable version of this, sorry about it
 * fixed the three dice issue with the human NPCs sheet

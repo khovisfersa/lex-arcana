@@ -4,3 +4,5 @@
 - ParvusDomus https://github.com/ParvusDomus
 
 The project is based on the DandD5e game system for Foundry VTT &trade; and so, it may share a part of the same code
+## Foundry v13 / v14 port (fork)
+- khovisfersa https://github.com/khovisfersa - port of the system to Foundry VTT v13/v14 in https://github.com/khovisfersa/lex-arcana
