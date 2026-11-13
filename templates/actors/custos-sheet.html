@@ -1,110 +1,82 @@
 <div class="lexarcana-sheet {{cssClass}} flexcol">
 
     {{!-- Sheet Header --}}
-    <header class="sheet-header">
+    <header class="sheet-header la-header">
+        <div class="la-portrait">
+            <span class="la-laurel la-laurel-left"></span>
+            <img class="profile" src="{{actor.img}}" title="{{actor.name}}" data-edit="img" data-action="editImage"/>
+            <span class="la-laurel la-laurel-right"></span>
+        </div>
 
-        <section class="header-details no-circle">
-            {{!-- Custos Summary --}}
-			<ul class="flexrow">
-				<li><div class="portrait">
-                    <img class="laurel" src="./systems/LexArcana/styles/images/laurel1.webp"/>
-                    <img class="profile" src="{{actor.img}}" title="{{actor.name}}" data-edit="img" data-action="editImage"/>
-                    <img class="laurel" src="./systems/LexArcana/styles/images/laurel2.webp"/>
-                </div></li>
-				<li>
-					<h1 class="charname">
-						<input name="name" type="text" value="{{actor.name}}" placeholder="{{ localize 'LexArcana.Name' }}"/>
-					</h1>
-                    <ul class="flexrow">
-                        {{#if isGM}}
-                        <li>
-                            <h4 class="attribute-name box-title">{{ localize "LexArcana.NPC" }}</h4>
-                            <div class="attribute-value multiple">
-                                <input name="system.attributes.npc" type="checkbox" {{checked actor.system.attributes.npc}} />
-                            </div>
-                        </li>
-                        {{/if}}
-                         <li>
-                             <h4 class="attribute-name box-title">{{ localize "LexArcana.Age" }}</h4>
-                             <div class="attribute-value">
-                                <input name="system.age" type="text" value="{{actor.system.age}}" placeholder="19"/>
-                             </div>
-                        </li>
-                        <li>
-                            <h4 class="attribute-name box-title">{{ localize "LexArcana.Gender" }}</h4>
-                            <div class="attribute-value">
-                                <input name="system.gender" type="text" value="{{actor.system.gender}}" placeholder="N/A"/>
-                            </div>
-                        </li>
-                        <li>
-                            <h4 class="attribute-name box-title">{{ localize "LexArcana.FateRoll" }}</h4>
-                            <div class="attribute-value">
-                                <input name="system.fateRoll" type="checkbox" {{checked actor.system.fateRoll}}/>
-                            </div>
-                        </li>
-                    </ul>
-				</li>                
-			</ul>
-            {{!-- Header sub Attributes --}}
-            <ul class="attributes flexrow">
-                <li class="attribute languages">
-                    <h4 class="attribute-name box-title">{{ localize "LexArcana.Languages" }}</h4>
-                    <div class="attribute-wide-value">
-                        <input name="system.languages" type="text" value="{{actor.system.languages}}" placeholder="N/A" style="width: auto";/>
-                    </div>
-                </li>
-                <li class="attribute office">
-                    <h4 class="attribute-name box-title">{{ localize "LexArcana.Office" }}</h4>
-                    <div class="attribute-wide-value">
-                        <input name="system.office" type="text" value="{{actor.system.office}}" placeholder="N/A"/>
-                    </div>
-                </li>
-                <li class="attribute rank">
-                    <h4 class="attribute-name box-title">{{ localize "LexArcana.Rank" }}</h4>
-                    <div class="attribute-wide-value">
-                        <input name="system.rank" type="text" value="{{actor.system.rank}}" placeholder="Gregarius"/>
-                    </div>
-                </li>
-                <li>
-                    <h4 class="attribute-name box-title">{{ localize "LexArcana.Treated" }}</h4>
-                    <div class="attribute-value multiple">
-                        <input name="system.treated" type="checkbox" {{checked actor.system.treated}} />
-                    </div>
-                </li>
-            </ul>
-
-            {{!-- Header Attributes --}}
-            <ul class="attributes flexrow">
-                <li class="attribute health">
-                    <h4 class="attribute-name box-title">{{ localize "LexArcana.HitPoints" }} | {{ localize "LexArcana.Encumbrance" }}</h4>
-                    <div class="attribute-value multiple">
-                        {{#if (lte actor.system.attributes.hitPoints.value actor.system.encumbrance)}}
-                            <input name="system.attributes.hitPoints.value" style="color:darkred" type="text" value="{{actor.system.attributes.hitPoints.value}}" placeholder="10"/>
-                        {{else}}
-                            <input name="system.attributes.hitPoints.value" type="text" value="{{actor.system.attributes.hitPoints.value}}" placeholder="10"/>
-                        {{/if}}
-                        <span class="sep"> / </span>
-                        <input name="system.attributes.hitPoints.max" type="text" value="{{actor.system.attributes.hitPoints.max}}" placeholder="10"/>
-                        <span class="sep">  |  </span>
-                        <input type="text" value="{{actor.system.encumbrance}}" readonly data-tooltip="LexArcana.Encumbrance"/>
-                    </div>
-                </li>
-
-                <li class="attribute pietas">
-                    <h4 class="attribute-name box-title">{{ localize "LexArcana.Pietas" }}</h4>
-                    <div class="attribute-value multiple">
-                        <input name="system.attributes.pietas.value" type="text" value="{{actor.system.attributes.pietas.value}}" placeholder="10"/>
-                        <span class="sep"> / </span>
-                        <input name="system.attributes.pietas.max" type="text" value="{{actor.system.attributes.pietas.max}}" placeholder="10"/>
-                    </div>
-                </li>
-				<li class="item item-header province item-controls" data-item-id="{{province._id}}">
-                    <h4 class="attribute-name box-title" data-pmbut="{{province._id}}">{{ localize "LexArcana.Province" }}</h4>
-					{{province.name}}
-				</li>
-            </ul>
-        </section>
+        <div class="la-identity">
+            <div class="la-eyebrow">Cohors Auxiliaria Arcana</div>
+            <h1 class="charname">
+                <input name="name" type="text" value="{{actor.name}}" placeholder="{{ localize 'LexArcana.Name' }}"/>
+            </h1>
+            <div class="la-titles">
+                <label class="la-field la-field-wide">
+                    <span class="la-label">{{ localize "LexArcana.Office" }}</span>
+                    <input name="system.office" type="text" value="{{actor.system.office}}" placeholder="N/A"/>
+                </label>
+                <span class="la-sep">&#10022;</span>
+                <label class="la-field la-field-wide">
+                    <span class="la-label">{{ localize "LexArcana.Rank" }}</span>
+                    <input name="system.rank" type="text" value="{{actor.system.rank}}" placeholder="Gregarius"/>
+                </label>
+            </div>
+            <div class="la-details">
+                <label class="la-field">
+                    <span class="la-label">{{ localize "LexArcana.Age" }}</span>
+                    <input name="system.age" type="text" value="{{actor.system.age}}" placeholder="19"/>
+                </label>
+                <label class="la-field">
+                    <span class="la-label">{{ localize "LexArcana.Gender" }}</span>
+                    <input name="system.gender" type="text" value="{{actor.system.gender}}" placeholder="N/A"/>
+                </label>
+                <label class="la-field la-field-wide">
+                    <span class="la-label">{{ localize "LexArcana.Languages" }}</span>
+                    <input name="system.languages" type="text" value="{{actor.system.languages}}" placeholder="N/A"/>
+                </label>
+                <div class="la-field la-field-wide la-province" data-item-id="{{province._id}}">
+                    <span class="la-label">{{ localize "LexArcana.Province" }}</span>
+                    <span class="la-static">{{#if province}}{{province.name}}{{else}}&mdash;{{/if}}</span>
+                </div>
+            </div>
+            <div class="la-toggles">
+                <label class="la-toggle"><input name="system.fateRoll" type="checkbox" {{checked actor.system.fateRoll}}/> {{ localize "LexArcana.FateRoll" }}</label>
+                <label class="la-toggle"><input name="system.treated" type="checkbox" {{checked actor.system.treated}}/> {{ localize "LexArcana.Treated" }}</label>
+                {{#if isGM}}
+                <label class="la-toggle"><input name="system.attributes.npc" type="checkbox" {{checked actor.system.attributes.npc}}/> {{ localize "LexArcana.NPC" }}</label>
+                {{/if}}
+            </div>
+        </div>
     </header>
+
+    {{!-- Resources --}}
+    <div class="la-resources">
+        <div class="la-cartouche health{{#if (lte actor.system.attributes.hitPoints.value actor.system.encumbrance)}} la-danger{{/if}}">
+            <span class="la-label">{{ localize "LexArcana.HitPoints" }}</span>
+            <div class="la-cartouche-values">
+                <input name="system.attributes.hitPoints.value" type="text" value="{{actor.system.attributes.hitPoints.value}}" placeholder="10"/>
+                <span class="la-slash">/</span>
+                <input name="system.attributes.hitPoints.max" type="text" value="{{actor.system.attributes.hitPoints.max}}" placeholder="10"/>
+            </div>
+        </div>
+        <div class="la-cartouche pietas">
+            <span class="la-label">{{ localize "LexArcana.Pietas" }}</span>
+            <div class="la-cartouche-values">
+                <input name="system.attributes.pietas.value" type="text" value="{{actor.system.attributes.pietas.value}}" placeholder="10"/>
+                <span class="la-slash">/</span>
+                <input name="system.attributes.pietas.max" type="text" value="{{actor.system.attributes.pietas.max}}" placeholder="10"/>
+            </div>
+        </div>
+        <div class="la-cartouche encumbrance">
+            <span class="la-label">{{ localize "LexArcana.Encumbrance" }}</span>
+            <div class="la-cartouche-values">
+                <input type="text" value="{{actor.system.encumbrance}}" readonly data-tooltip="LexArcana.Encumbrance"/>
+            </div>
+        </div>
+    </div>
 
     {{!-- Custos Sheet Navigation --}}
     <nav class="sheet-navigation tabs" data-group="primary">

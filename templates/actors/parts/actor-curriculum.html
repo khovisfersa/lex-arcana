@@ -1,7 +1,7 @@
 <div class="inventory-filters inventory no-circle">
 	<div>
-		<div><h3><label>{{ localize "LexArcana.Experience" }}: </label><input class="curriculum-value" name="system.experience" value="{{actor.system.experience}}" type="number"/></h3></div>
-		<table>
+		<div class="la-experience"><span class="la-label">{{ localize "LexArcana.Experience" }}</span><input class="curriculum-value" name="system.experience" value="{{actor.system.experience}}" type="number"/></div>
+		<table class="la-table">
 				{{#each actor.system.peritiae as |peritiaValue peritiaKey|}}
 				<tr>
 					<td><label class="curriculum-value">{{peritiaValue.label}}</label></td>

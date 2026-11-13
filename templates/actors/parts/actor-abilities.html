@@ -1,50 +1,47 @@
-<div class="abilities no-circle">
-        {{!-- Virtutes Abilities --}}
-        <div>
-                <h3>{{ localize "LexArcana.VirtutesName" }}</h3>
-                <ul class="virtutes flexrow grid-layout-3c">
-                        {{#each actor.system.virtutes as |virtuteValue virtuteKey|}}
-                        <li class="virtute">
-                                <div class="grid-layout3 grid-layout3-virtute">
-                                        <a for="system.virtutes.{{virtuteKey}}.value" class="virtute-name grid-layout3-area1 rollable dialog-roll" data-action="rollDialog" data-virtuteid="{{virtuteKey}}" data-actorname="{{../actor.name}}">{{virtuteValue.label}}</a>
-                                        <input class="virtute-value grid-layout3-area2" name="system.virtutes.{{virtuteKey}}.value" value="{{virtuteValue.value}}" type="number"/>
-                                        <i class="dialog-roll roll1d-icon grid-layout3-area3" data-action="rollDialog" data-virtuteid="{{virtuteKey}}" data-actorname="{{../actor.name}}"></i>
-                                </div>
-                        </li>
-                        {{/each}}
-                </ul>
-        </div>
-        {{!-- Peritiae Abilities --}}
-        <div>
-                <h3>{{ localize "LexArcana.PeritiaeName" }}</h3>
-                <ul class="peritiae flexrow grid-layout-3c">
-                        {{#each actor.system.peritiae as |peritiaValue peritiaKey|}}
-                        <li class="peritia">
-                                <div class="grid-layout4 grid-layout4-peritia">
-                                        <a class="add-peritiae-specialty add-icon grid-layout4-area0" data-action="addSpecialty" data-peritiaid="{{peritiaKey}}"></a>
-						<div class="grid-layout4-area1">
-							<a for="system.peritiae.{{peritiaKey}}.value" class="peritia-name rollable dialog-roll" data-action="rollDialog" data-peritiaid="{{peritiaKey}}" data-actorname="{{../actor.name}}">{{peritiaValue.label}}</a>
-							<span class="computed-value" data-tooltip="Base: {{peritiaValue.baseValue}} + Province: {{peritiaValue.provinceValue}}">{{peritiaValue.finalValue}}</span>
-						</div>
-                                        <input class="peritia-value grid-layout4-area2" name="system.peritiae.{{peritiaKey}}.value" value="{{peritiaValue.value}}" type="number"/>
-                                        <i class="dialog-roll roll1d-icon grid-layout4-area3" data-action="rollDialog" data-peritiaid="{{peritiaKey}}" data-actorname="{{../actor.name}}"></i>
-                                </div>
-                                {{#each peritiaValue.specialties as |specialtyValue specialtyKey|}}
-                                <div class="grid-layout4 grid-layout4-specialty">
-                                        <a class="grid-layout4-area0 delete-peritiae-specialty fas fa-trash" data-action="deleteSpecialty" data-peritiaid="{{peritiaKey}}" data-specialtyid="{{specialtyValue.name}}">&nbsp;</a>
-                                        <input style="display:none;" name="system.peritiae.{{peritiaKey}}.specialties.{{specialtyKey}}.defaultRoll" value="{{specialtyValue.defaultRoll}}" type="text"/>
-                                        <input class="peritia-name grid-layout4-area1" name="system.peritiae.{{peritiaKey}}.specialties.{{specialtyKey}}.name" value="{{specialtyValue.name}}" type="text"/>
-                                        <input class="peritia-value grid-layout4-area2" name="system.peritiae.{{peritiaKey}}.specialties.{{specialtyKey}}.modifier" value="{{specialtyValue.modifier}}" type="text"/>
-					{{#ife peritiaKey "deBello"}}
-                                                <select class="peritia-value grid-layout4-area1" name="system.peritiae.{{peritiaKey}}.specialties.{{specialtyKey}}.itemClass">
-                                                        {{selectOptions @root.itemClassChoices selected=specialtyValue.itemClass blank=(localize "LexArcana.ItemClassEmpty")}}
-                                                </select>
-                                        {{/ife}}
-                                        <i class="dialog-roll roll1d-icon grid-layout4-area3" data-action="rollDialog" data-peritiaid="{{peritiaKey}}" data-specialtyid="{{specialtyValue.name}}" data-actorname="{{../../actor.name}}"></i>
-                                </div>
-                                {{/each}}
-                        </li>
-                        {{/each}}
-                </ul>
-        </div>
+<div class="abilities la-abilities">
+    {{!-- Virtutes --}}
+    <section class="la-section">
+        <h3 class="la-title">{{ localize "LexArcana.VirtutesName" }}</h3>
+        <ul class="la-stat-grid">
+            {{#each actor.system.virtutes as |virtuteValue virtuteKey|}}
+            <li class="la-stat virtute">
+                <a class="la-stat-name virtute-name rollable dialog-roll" data-action="rollDialog" data-virtuteid="{{virtuteKey}}" data-actorname="{{../actor.name}}">{{virtuteValue.label}}</a>
+                <input class="la-coin virtute-value" name="system.virtutes.{{virtuteKey}}.value" value="{{virtuteValue.value}}" type="number"/>
+                <a class="la-roll roll1d-icon dialog-roll" data-action="rollDialog" data-virtuteid="{{virtuteKey}}" data-actorname="{{../actor.name}}" data-tooltip="{{virtuteValue.label}}"></a>
+            </li>
+            {{/each}}
+        </ul>
+    </section>
+
+    {{!-- Peritiae --}}
+    <section class="la-section">
+        <h3 class="la-title">{{ localize "LexArcana.PeritiaeName" }}</h3>
+        <ul class="la-stat-grid">
+            {{#each actor.system.peritiae as |peritiaValue peritiaKey|}}
+            <li class="la-stat la-peritia peritia">
+                <div class="la-stat-row">
+                    <a class="la-add add-peritiae-specialty" data-action="addSpecialty" data-peritiaid="{{peritiaKey}}" data-tooltip="LexArcana.AddPeritiaeSpecialty"><i class="fa-solid fa-plus"></i></a>
+                    <a class="la-stat-name peritia-name rollable dialog-roll" data-action="rollDialog" data-peritiaid="{{peritiaKey}}" data-actorname="{{../actor.name}}">{{peritiaValue.label}}</a>
+                    <span class="la-total computed-value" data-tooltip="Base: {{peritiaValue.baseValue}} + Province: {{peritiaValue.provinceValue}}">{{peritiaValue.finalValue}}</span>
+                    <input class="la-coin peritia-value" name="system.peritiae.{{peritiaKey}}.value" value="{{peritiaValue.value}}" type="number"/>
+                    <a class="la-roll roll1d-icon dialog-roll" data-action="rollDialog" data-peritiaid="{{peritiaKey}}" data-actorname="{{../actor.name}}" data-tooltip="{{peritiaValue.label}}"></a>
+                </div>
+                {{#each peritiaValue.specialties as |specialtyValue specialtyKey|}}
+                <div class="la-specialty grid-layout4-specialty">
+                    <a class="la-delete delete-peritiae-specialty" data-action="deleteSpecialty" data-peritiaid="{{peritiaKey}}" data-specialtyid="{{specialtyValue.name}}"><i class="fa-solid fa-xmark"></i></a>
+                    <input style="display:none;" name="system.peritiae.{{peritiaKey}}.specialties.{{specialtyKey}}.defaultRoll" value="{{specialtyValue.defaultRoll}}" type="text"/>
+                    <input class="peritia-name" name="system.peritiae.{{peritiaKey}}.specialties.{{specialtyKey}}.name" value="{{specialtyValue.name}}" type="text"/>
+                    <input class="peritia-value" name="system.peritiae.{{peritiaKey}}.specialties.{{specialtyKey}}.modifier" value="{{specialtyValue.modifier}}" type="text"/>
+                    {{#ife peritiaKey "deBello"}}
+                    <select class="peritia-value" name="system.peritiae.{{peritiaKey}}.specialties.{{specialtyKey}}.itemClass">
+                        {{selectOptions @root.itemClassChoices selected=specialtyValue.itemClass blank=(localize "LexArcana.ItemClassEmpty")}}
+                    </select>
+                    {{/ife}}
+                    <i class="la-roll roll1d-icon dialog-roll" data-action="rollDialog" data-peritiaid="{{peritiaKey}}" data-specialtyid="{{specialtyValue.name}}" data-actorname="{{../../actor.name}}"></i>
+                </div>
+                {{/each}}
+            </li>
+            {{/each}}
+        </ul>
+    </section>
 </div>

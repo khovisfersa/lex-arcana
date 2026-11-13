@@ -1,41 +1,29 @@
 <div class="lexarcana-sheet {{cssClass}} flexcol">
 
     {{!-- Sheet Header --}}
-    <header class="sheet-header">
+    <header class="sheet-header la-header">
+        <div class="la-portrait">
+            <span class="la-laurel la-laurel-left"></span>
+            <img class="profile" src="{{actor.img}}" title="{{actor.name}}" data-edit="img" data-action="editImage"/>
+            <span class="la-laurel la-laurel-right"></span>
+        </div>
 
-        <section class="header-details no-circle">
-            {{!-- Custos Summary --}}
-			<ul class="flexrow">
-				<li><div class="portrait">
-                    <img class="laurel" src="./systems/LexArcana/styles/images/laurel1.webp"/>
-                    <img class="profile" src="{{actor.img}}" title="{{actor.name}}" data-edit="img" data-action="editImage"/>
-                    <img class="laurel" src="./systems/LexArcana/styles/images/laurel2.webp"/>
-                </div></li>
-				<li>
-					<h1 class="charname">
-						<input name="name" type="text" value="{{actor.name}}" placeholder="{{ localize 'LexArcana.Name' }}"/>
-					</h1>
-                    <ul class="flexrow">
-                        {{#if isGM}}
-                        <li>
-                            <h4 class="attribute-name box-title">{{ localize "LexArcana.NPC" }}</h4>
-                            <div class="attribute-value multiple">
-                                <input name="system.attributes.npc" type="checkbox" {{checked actor.system.attributes.npc}} />
-                            </div>
-                        </li>
-                        {{/if}}
-                        <li>
-                            <h4 class="attribute-name box-title">{{ localize "LexArcana.FateRoll" }}</h4>
-                            <div class="attribute-value">
-                                <input name="system.fateRoll" type="checkbox" {{checked actor.system.fateRoll}}/>
-                            </div>
-                        </li>
-                    </ul>
-				</li>                
-			</ul>
-            {{> "systems/LexArcana/templates/actors/npcparts/npc-header.html"}}
-        </section>
+        <div class="la-identity">
+            <div class="la-eyebrow">{{ localize "TYPES.Actor.npc" }}</div>
+            <h1 class="charname">
+                <input name="name" type="text" value="{{actor.name}}" placeholder="{{ localize 'LexArcana.Name' }}"/>
+            </h1>
+            <div class="la-toggles">
+                <label class="la-toggle"><input name="system.fateRoll" type="checkbox" {{checked actor.system.fateRoll}}/> {{ localize "LexArcana.FateRoll" }}</label>
+                {{#if isGM}}
+                <label class="la-toggle"><input name="system.attributes.npc" type="checkbox" {{checked actor.system.attributes.npc}}/> {{ localize "LexArcana.NPC" }}</label>
+                {{/if}}
+            </div>
+        </div>
     </header>
+
+    {{!-- Resources --}}
+    {{> "systems/LexArcana/templates/actors/npcparts/npc-header.html"}}
 
     {{!-- Custos Sheet Navigation --}}
     <nav class="sheet-navigation tabs" data-group="primary">

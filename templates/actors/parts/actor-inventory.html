@@ -1,6 +1,6 @@
 <div class="inventory-filters inventory no-circle">
 	<div>
-		<h3>{{ localize "LexArcana.InventoryEquipedSectionTitle" }}</h3>
+		<h3 class="la-title">{{ localize "LexArcana.InventoryEquipedSectionTitle" }}</h3>
 		<ul>
 		{{#each items as |item key|}}
 			{{#ife item.system.active true}}
@@ -20,7 +20,7 @@
 						 	<a class="fas fa-tshirt armor-roll" data-action="armorRoll" data-id="{{item._id}}" data-actorname="{{../actor.name}}">&nbsp;</a>
 					    {{/ife}}
 					</div>
-					<div class="fas fa-anchor inventory"> {{item.system.encumbrance}}</div>
+					<div class="item-stats" data-tooltip="LexArcana.Encumbrance"><i class="fa-solid fa-weight-hanging"></i> {{item.system.encumbrance}}</div>
                     <div class="item-modify inventory">
 						<a class="item-equip fas fa-thumbs-up" data-action="itemEquip" data-id="{{item._id}}">&nbsp;</a>
 						<a class="item-drop fas fa-download" data-action="itemDrop" data-id="{{item._id}}">&nbsp;</a>
@@ -34,7 +34,7 @@
 		</ul>
 	</div>
 	<div>
-		<h3>{{ localize "LexArcana.InventoryBagSectionTitle" }}</h3>
+		<h3 class="la-title">{{ localize "LexArcana.InventoryBagSectionTitle" }}</h3>
 		<ul>
 		{{#each items as |item key|}}
 			{{#ifne item.system.active true}}
@@ -43,7 +43,7 @@
 					<a class="item-image" data-id="{{item._id}}"><img src="{{item.img}}" title="{{item.name}}" width="32" height="32" /></a>
 					<a class="item-name" title="{{item.name}}" data-id="{{item._id}}">{{item.name}}</a>
 					<div class="item-roll_area inventory"></div>
-					<div class="fas fa-anchor inventory"> {{item.system.encumbrance}}</div>
+					<div class="item-stats" data-tooltip="LexArcana.Encumbrance"><i class="fa-solid fa-weight-hanging"></i> {{item.system.encumbrance}}</div>
 					<div class="item-modify">
 						<a class="item-equip fas fa-hand-rock" data-action="itemEquip" style="color:grey" data-id="{{item._id}}">&nbsp;</a>
 						<a class="item-drop fas fa-download" data-action="itemDrop" data-id="{{item._id}}">&nbsp;</a>
@@ -55,7 +55,7 @@
 			{{/ifne}}
 		{{/each}}
 		</ul>
-		<h3>{{ localize "LexArcana.InventoryDroppedSectionTitle" }}</h3>
+		<h3 class="la-title">{{ localize "LexArcana.InventoryDroppedSectionTitle" }}</h3>
 		<ul>
 		{{#each items as |item key|}}
 			{{#ifne item.system.active true }}
@@ -64,7 +64,7 @@
 					<a class="item-image" data-id="{{item._id}}"><img src="{{item.img}}" title="{{item.name}}" width="32" height="32" /></a>
 					<a class="item-name" title="{{item.name}}" data-id="{{item._id}}">{{item.name}}</a>
 					<div class="item-roll_area inventory"></div>
-					<div class="fas fa-anchor inventory"> {{item.system.encumbrance}}</div>
+					<div class="item-stats" data-tooltip="LexArcana.Encumbrance"><i class="fa-solid fa-weight-hanging"></i> {{item.system.encumbrance}}</div>
 					<div class="item-modify">
 						<a class="item-equip fas fa-upload" data-action="itemEquip" data-id="{{item._id}}">&nbsp;</a>
 						<a class="item-edit fas fa-edit" data-action="itemEdit" data-id="{{item._id}}">&nbsp;</a>

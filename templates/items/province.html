@@ -10,7 +10,7 @@
             </h1>
 
             <div class="item-subtitle">
-                <h4 class="item-type">{{item.type}}</h4>
+                <h4 class="item-type">{{localize (concat "TYPES.Item." item.type)}}</h4>
             </div>
         </div>
     </header>
@@ -27,7 +27,7 @@
         <div class="tab information flexrow no-circle" data-group="primary" data-tab="information">
             {{!-- Languages spoken --}}
             <div>
-                <h3>{{ localize "LexArcana.LanguagesSpokenLabel" }}</h3>
+                <h3 class="la-title">{{ localize "LexArcana.LanguagesSpokenLabel" }}</h3>
                 <div class="grid-layout-2c">
                     <input style="width: 100%" type="text" name="system.languages" value="{{item.system.languages}}"/>
                 </div>
@@ -35,7 +35,7 @@
 
             {{!-- Province Peritiae Bonuses --}}
             <div>
-                <h3>{{ localize "LexArcana.ProvincePeritiaeModifiersLabel" }}</h3>
+                <h3 class="la-title">{{ localize "LexArcana.ProvincePeritiaeModifiersLabel" }}</h3>
                 <div>
                     <ul class="grid-layout-2c grid-layout2c-left-text-right-number">
                         <li><label>{{ localize "LexArcana.Peritia.DeBello" }}</label></li>

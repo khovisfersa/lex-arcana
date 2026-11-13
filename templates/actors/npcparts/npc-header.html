@@ -1,29 +1,22 @@
-
-            {{!-- Header sub Attributes --}}
-            <ul class="attributes flexrow">
-				<li>
-					<h4 class="attribute-name box-title">{{ localize "LexArcana.DiceValue" }}</h4>
-					<div class="attribute-value">
-                        <select name="system.diceValue">
-                            {{selectOptions config.DiceValues selected=actor.system.diceValue}}
-                          </select>
-          
-					</div>
-			   </li>
-                <li>
-                    <h4 class="attribute-name box-title">{{ localize "LexArcana.Size" }}</h4>
-                    <div class="attribute-wide-value">
-                        <input name="system.size" type="text" value="{{actor.system.size}}" placeholder="1"/>
-                    </div>
-                </li>
-            </ul>
-
-            {{!-- Header Attributes --}}
-            <ul class="attributes flexrow">
-                <li class="attribute health">
-					<h4 class="attribute-name box-title">{{ localize "LexArcana.HitPoints" }}</h4>
-					<div class="attribute-value">
-						<input name="system.hitPoints" type="text" value="{{actor.system.hitPoints}}" placeholder="4"/>
-					</div>
-                </li>
-            </ul>
+<div class="la-resources">
+    <div class="la-cartouche health">
+        <span class="la-label">{{ localize "LexArcana.HitPoints" }}</span>
+        <div class="la-cartouche-values">
+            <input name="system.hitPoints" type="text" value="{{actor.system.hitPoints}}" placeholder="4"/>
+        </div>
+    </div>
+    <div class="la-cartouche dice">
+        <span class="la-label">{{ localize "LexArcana.DiceValue" }}</span>
+        <div class="la-cartouche-values">
+            <select name="system.diceValue">
+                {{selectOptions config.DiceValues selected=actor.system.diceValue}}
+            </select>
+        </div>
+    </div>
+    <div class="la-cartouche size">
+        <span class="la-label">{{ localize "LexArcana.Size" }}</span>
+        <div class="la-cartouche-values">
+            <input name="system.size" type="text" value="{{actor.system.size}}" placeholder="1"/>
+        </div>
+    </div>
+</div>

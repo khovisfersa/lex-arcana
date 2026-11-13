@@ -1,13 +1,13 @@
 <div class="inventory-filters inventory no-circle">
 	<div>
-		<h3>{{ localize "LexArcana.IndigamentaSectionTitle" }}</h3>
+		<h3 class="la-title">{{ localize "LexArcana.IndigamentaSectionTitle" }}</h3>
 		<ul>
 		{{#each indigamenta as |indigamentum key|}}
 		<li class="item draggable" data-item-id="{{indigamentum._id}}">
 				<a class="item-image inventory" data-id="{{indigamentum._id}}"><img src="{{indigamentum.img}}" title="{{indigamentum.name}}" width="32" height="32" /></a>
 				<a class="item-name inventory indigatamenta-use" data-action="useIndigamentum" data-id="{{indigamentum._id}}" data-actorname="{{../actor.name}}" title="{{indigamentum.name}}">{{indigamentum.name}}</a>
-				{{#if indigamentum.system.used}}<div class="fas fa-solid fa-ban inventory" style="color:red;"> </div>{{else}}
-				<div class="fas fa-bolt inventory"> {{indigamentum.system.cost}}</div>{{/if}}
+				{{#if indigamentum.system.used}}<div class="item-stats la-used" data-tooltip="LexArcana.Used"><i class="fa-solid fa-ban"></i></div>{{else}}
+				<div class="item-stats" data-tooltip="LexArcana.Cost"><i class="fa-solid fa-bolt"></i> {{indigamentum.system.cost}}</div>{{/if}}
 				<div class="item-modify inventory">
 					<a class="item-edit fas fa-edit" data-action="itemEdit" data-id="{{indigamentum._id}}">&nbsp;</a>
 					<a class="item-delete fas fa-trash" data-action="itemDelete" data-id="{{indigamentum._id}}">&nbsp;</a>
@@ -17,7 +17,7 @@
 		</ul>
 	</div>
 	<div>
-		<h3>{{ localize "LexArcana.TalentsSectionTitle" }}</h3>
+		<h3 class="la-title">{{ localize "LexArcana.TalentsSectionTitle" }}</h3>
 		<ul>
 		{{#each talents as |talent key|}}
 			<li class="item draggable" data-item-id="{{talent._id}}">
@@ -35,7 +35,7 @@
 		</ul>
 	</div>
 	<div>
-		<h3>{{ localize "LexArcana.RitualsSectionTitle" }}</h3>
+		<h3 class="la-title">{{ localize "LexArcana.RitualsSectionTitle" }}</h3>
 		<ul>
 		{{#each rituals as |ritual key|}}
 			<li class="item draggable" data-item-id="{{ritual._id}}">
@@ -44,7 +44,7 @@
 				<div class="item-roll_area inventory">
 					<a class="fas fa-dice dialog-roll" data-action="rollDialog" data-id="{{ritual._id}}" data-peritiaid="{{ritual.system.peritia}}" data-actorname="{{../actor.name}} ({{ritual.name}})">&nbsp;</a>
 				</div>
-				<div class="fas fa-bolt inventory"> {{ritual.system.cost}}</div>
+				<div class="item-stats" data-tooltip="LexArcana.Cost"><i class="fa-solid fa-bolt"></i> {{ritual.system.cost}}</div>
 				<div class="item-modify inventory">
 					<a class="item-edit fas fa-edit" data-action="itemEdit" data-id="{{ritual._id}}">&nbsp;</a>
 					<a class="item-delete fas fa-trash" data-action="itemDelete" data-id="{{ritual._id}}">&nbsp;</a>

@@ -137,11 +137,11 @@ export class LexArcanaDice {
 			computedTotal = evaluatedRoll.total + previousTotal;
 			if(previousHasFated && !diceHasFated)
 			{
-				message.content+='<span>'+game.i18n.localize(CONFIG.LexArcana.ResultName)+': '+computedTotal+' ('+previousTotal+'+'+evaluatedRoll.total+')</span>';
+				message.content+='<span class="la-result">'+game.i18n.localize(CONFIG.LexArcana.ResultName)+' <strong>'+computedTotal+'</strong> <em>('+previousTotal+'+'+evaluatedRoll.total+')</em></span>';
 			}
 			else if(!previousHasFated)
 			{
-				message.content+='<span>'+game.i18n.localize(CONFIG.LexArcana.ResultName)+': '+computedTotal+' <i class="fas fa-dice-d6"></i></span>';
+				message.content+='<span class="la-result">'+game.i18n.localize(CONFIG.LexArcana.ResultName)+' <strong>'+computedTotal+'</strong></span>';
 			}
 			let expressionResult = '';
 			evaluatedRoll.dice.forEach((die) => expressionResult+=die.total+' ');

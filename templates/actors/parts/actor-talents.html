@@ -1,6 +1,6 @@
 <div class="inventory-filters inventory no-circle">
 	<div>
-		<h2>{{ localize "LexArcana.IndigamentaSectionTitle" }}</h2>
+		<h2 class="la-title">{{ localize "LexArcana.IndigamentaSectionTitle" }}</h2>
 		<ul>
 		{{#each indigamenta as |indigamentum key|}}
 			<li class="indigamentum">
@@ -12,7 +12,7 @@
 		</ul>
 	</div>
 	<div>
-		<h2>{{ localize "LexArcana.RitualsSectionTitle" }}</h2>
+		<h2 class="la-title">{{ localize "LexArcana.RitualsSectionTitle" }}</h2>
 		<ul>
 		{{#each rituals as |ritual key|}}
 			<li class="item draggable" data-item-id="{{ritual._id}}">
